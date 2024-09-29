@@ -1,99 +1,62 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { loadModules } from "./utils/loadModules.js";
 import 'dotenv/config';
 
-import fs from 'fs/promises';
-import path from 'path';
-
-const functions = {};
-const declarations = [];
-
-const modulesPath = path.join(process.cwd(), 'src/modules');
-
 try {
-	const files = await fs.readdir(modulesPath);
+	const { functions, declarations} = await loadModules();
 
-	// Filter .js files and dynamically import them
-	const importPromises = files
-		.filter(file => file.endsWith('.js'))
-		.map(file => import(path.join(modulesPath, file)));
+	try {
+		const genAI = new GoogleGenerativeAI(process.env.API_KEY);
 
-	const modules = await Promise.all(importPromises);
+		console.log('Insert prompt then type Enter:\n');
 
-	// Extract func and decl from each module and push them to respective arrays
-	for (const moduleEx of modules) {
-		if (moduleEx.func && moduleEx.decl) {
-			Object.assign(functions, moduleEx.func);
-			declarations.push(moduleEx.decl);
-		} else {
-			continue;
-		}
-	}
+		process.stdin.on('data', async (data) => {
+			const prompt = data.toString().slice(0, -1);
 
-	// Now funcsArray and declsArray contain all the functions and declarations
-	console.log('Functions:', functions);
-	console.log('Declarations:', declarations);
-} catch (e) {
-	console.error('Error reading directory:', e.message);
-}
+			if (prompt === 'exit') process.exit(0);
+			
+			const generativeModel = genAI.getGenerativeModel({
+				// * Must be a model that supports function calling, like a Gemini 1.5 model
+				model: "gemini-1.5-flash",
+			
+				// * Must specify the function declarations for function calling
+				tools: {
+					functionDeclarations: declarations,
+				},
+			});
+			
+			const chat = generativeModel.startChat();		
+			const result = await chat.sendMessage(prompt);
+			
+			if ( Array.isArray( result.response.functionCalls() ) && ( result.response.functionCalls() ).length > 0) {
+				// gets the first function call found. (best suited??)
+				const call = result.response.functionCalls()[0];
 
-try {
-	// Access your API key as an environment variable
-	const genAI = new GoogleGenerativeAI(process.env.API_KEY);
-
-	// Ask a question to the user
-	console.log('Insert prompt then type Enter:\n');
-
-	process.stdin.on('data', async (data) => {
-		const prompt = data.toString();
-		
-		const generativeModel = genAI.getGenerativeModel({
-			// Use a model that supports function calling, like a Gemini 1.5 model
-			model: "gemini-1.5-flash",
-		
-			// Specify the function declaration.
-			tools: {
-				functionDeclarations: declarations,
-			},
+				const moduleResult = await functions[call.name](call.args);
+			
+				// Send the module response back
+				const result2 = await chat.sendMessage([{functionResponse: {
+					name: call.name,
+					response: moduleResult
+				}}]);
+			
+				// Log the text response.
+				console.log(result2.response.text());
+			} else {
+				// sends an error to the model, for a text response anyways
+				const result2 = await chat.sendMessage([{functionResponse: {
+					name: "null",
+					response: { error : "No handler module found that suits the prompt" }
+				}}]);
+			
+				console.log(result2.response.text());
+			}
 		});
-		
-		const chat = generativeModel.startChat();
-		
-		// Send the message to the model.
-		const result = await chat.sendMessage(prompt);
-		
-		if ( Array.isArray( result.response.functionCalls() ) && ( result.response.functionCalls() ).length > 0) {
-			// For simplicity, this uses the first function call found.
-			const call = result.response.functionCalls()[0];
-
-			// Call the executable function named in the function call
-			// with the arguments specified in the function call and
-			// let it call the hypothetical API.
-			const apiResponse = await functions[call.name](call.args);
-		
-			// Send the API response back to the model so it can generate
-			// a text response that can be displayed to the user.
-			const result2 = await chat.sendMessage([{functionResponse: {
-				name: call.name,
-				response: apiResponse
-			}}]);
-		
-			// Log the text response.
-			console.log(result2.response.text());
-		} else {
-			const result2 = await chat.sendMessage([{functionResponse: {
-				name: "none",
-				response: { error : "No handler found for the prompt" }
-			}}]);
-		
-			// Log the text response.
-			console.log(result2.response.text());
-		}
-
-		// Close the input stream if necessary
-		process.exit(); // Exit the process once input is handled
-	});
+	} catch (e) {
+		console.error('Error connecting to LLM API:', e.message);
+		process.exit();
+	}
 } catch (e) {
-	console.error('Error connecting to LLM API:', e.message);
+	console.error('Error importing modules:', e.message);
 	process.exit();
 }
-
