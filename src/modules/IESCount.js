@@ -18,6 +18,8 @@ export const module = [
 				else sql += `AND NO_UF_IES = '${where.uf}'`
 			}
 
+			// console.log(sql);
+
 			return { ... (await runQuery(sql))[0], filter : where };
 		}
 	},

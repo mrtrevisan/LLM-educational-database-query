@@ -1,9 +1,12 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { loadModules } from "./utils/loadModules.js";
 import 'dotenv/config';
+import { logToCsv } from "./utils/doLog.js";
 
 try {
 	const { functions, declarations} = await loadModules();
+
+	console.log(declarations);
 
 	try {
 		const genAI = new GoogleGenerativeAI(process.env.API_KEY);
@@ -11,9 +14,9 @@ try {
 		console.log('Insert prompt then type Enter:\n');
 
 		process.stdin.on('data', async (data) => {
-			const prompt = data.toString().slice(0, -1);
+			const prompt = data.toString();
 
-			if (prompt === 'exit') process.exit(0);
+			if (prompt.replace('\n', '') === 'exit') process.exit(0);
 			
 			const generativeModel = genAI.getGenerativeModel({
 				// * Must be a model that supports function calling, like a Gemini 1.5 model
@@ -40,8 +43,10 @@ try {
 					response: moduleResult
 				}}]);
 			
-				// Log the text response.
-				console.log(result2.response.text());
+				const response = result2.response.text();
+				console.log(response);
+
+				await logToCsv([prompt, call.name, response]);
 			} else {
 				// sends an error to the model, for a text response anyways
 				const result2 = await chat.sendMessage([{functionResponse: {
@@ -49,7 +54,10 @@ try {
 					response: { error : "No handler module found that suits the prompt" }
 				}}]);
 			
-				console.log(result2.response.text());
+				const response = result2.response.text();
+				console.log(response);
+
+				await logToCsv([prompt, "error", response]);
 			}
 		});
 	} catch (e) {
