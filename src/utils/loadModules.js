@@ -19,7 +19,7 @@ export async function loadModules()
 		const modules = await Promise.all(importPromises);
 
 		for (const m of modules) {
-			if (m.module[0] && m.module[1]) {
+			if (Array.isArray(m.module) && m.module.length == 2) {
 				Object.assign(functions, m.module[0]);
 				declarations.push(m.module[1]);
 			} else {

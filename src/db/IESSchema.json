@@ -1,9 +1,0 @@
-{
-    "Name" : "ED_SUP_IES",
-    "Columns" : {
-        "CO_IES" : "(integer) table primary key",
-        "NO_IES" : "(varchar[50]) Institution name",
-        "SG_IES" : "(varchar[50]) Institution acronym",
-        "IN_CAPITAL_IES" : "(integer) 1 if the institution is located in a capital city, 0 otherwise"
-    }
-}

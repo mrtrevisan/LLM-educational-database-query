@@ -1,12 +1,10 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { loadModules } from "./utils/loadModules.js";
-import 'dotenv/config';
 import { logToCsv } from "./utils/doLog.js";
+import 'dotenv/config';
 
 try {
 	const { functions, declarations} = await loadModules();
-
-	console.log(declarations);
 
 	try {
 		const genAI = new GoogleGenerativeAI(process.env.API_KEY);
