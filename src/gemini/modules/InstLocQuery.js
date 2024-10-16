@@ -1,4 +1,4 @@
-import { runQuery } from "../db/db2Client.js"
+import { runQuery } from "../../common/db/db2Client.js"
 
 export const module = [
 	// function
@@ -26,8 +26,8 @@ export const module = [
 			console.log(sql);
 			
 			const res = await runQuery(sql);
-			console.log("res:", res)
-			process.exit();
+			// console.log("res:", res)
+
 			return {sqlResult : res};
 		}
 	},

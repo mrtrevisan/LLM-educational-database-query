@@ -1,10 +1,10 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import { loadModules } from "./utils/loadModules.js";
-import { logToCsv } from "./utils/doLog.js";
+import { loadModules } from "../common/utils/loadModules.js";
+import { logToCsv } from "../common/utils/doLog.js";
 import 'dotenv/config';
 
 try {
-	const { functions, declarations} = await loadModules();
+	const { functions, declarations} = await loadModules("src/gemini/modules");
 
 	try {
 		const genAI = new GoogleGenerativeAI(process.env.API_KEY);
@@ -44,7 +44,7 @@ try {
 				const response = result2.response.text();
 				console.log(response);
 
-				await logToCsv([prompt, call.name, response]);
+				await logToCsv("logs/gemini.csv", [prompt, call.name, response]);
 			} else {
 				// sends an error to the model, for a text response anyways
 				const result2 = await chat.sendMessage([{functionResponse: {
@@ -55,7 +55,7 @@ try {
 				const response = result2.response.text();
 				console.log(response);
 
-				await logToCsv([prompt, "error", response]);
+				await logToCsv("logs/gemini.csv", [prompt, "error", response]);
 			}
 		});
 	} catch (e) {

@@ -2,9 +2,9 @@ import fs from 'fs/promises';
 import path from 'path';
 
 // Dynamically loads all modules from the src/modules dir
-export async function loadModules()
+export async function loadModules(modules_path)
 {
-	const modulesPath = path.join(process.cwd(), 'src/modules');
+	const modulesPath = path.join(process.cwd(), modules_path);
 
     const functions = {};
     const declarations = [];
