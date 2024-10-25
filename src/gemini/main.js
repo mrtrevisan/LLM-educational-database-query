@@ -9,24 +9,23 @@ try {
 	try {
 		const genAI = new GoogleGenerativeAI(process.env.API_KEY);
 
-		console.log('Insert prompt then type Enter:\n');
+		const generativeModel = genAI.getGenerativeModel({
+			// * Must be a model that supports function calling, like a Gemini 1.5 model
+			model: "gemini-1.5-flash",
+		
+			// * Must specify the function declarations for function calling
+			tools: {
+				functionDeclarations: declarations,
+			},
+		});
 
+		const chat = generativeModel.startChat();		
+
+		console.log('Insert prompt then type Enter:\n');
 		process.stdin.on('data', async (data) => {
 			const prompt = data.toString();
-
-			if (prompt.replace('\n', '') === 'exit') process.exit(0);
+			if (prompt.replace('\n', '') === 'exit') process.exit(0);			
 			
-			const generativeModel = genAI.getGenerativeModel({
-				// * Must be a model that supports function calling, like a Gemini 1.5 model
-				model: "gemini-1.5-flash",
-			
-				// * Must specify the function declarations for function calling
-				tools: {
-					functionDeclarations: declarations,
-				},
-			});
-			
-			const chat = generativeModel.startChat();		
 			const result = await chat.sendMessage(prompt);
 			
 			if ( Array.isArray( result.response.functionCalls() ) && ( result.response.functionCalls() ).length > 0) {
@@ -46,16 +45,16 @@ try {
 
 				await logToCsv("logs/gemini.csv", [prompt, call.name, response]);
 			} else {
-				// sends an error to the model, for a text response anyways
-				const result2 = await chat.sendMessage([{functionResponse: {
-					name: "null",
-					response: { error : "No handler module found that suits the prompt" }
-				}}]);
+				// // sends an error to the model, for a text response anyways
+				// const result2 = await chat.sendMessage([{functionResponse: {
+				// 	name: "null",
+				// 	response: { error : "No handler module found that suits the prompt" }
+				// }}]);
 			
-				const response = result2.response.text();
+				const response = result.response.text();
 				console.log(response);
 
-				await logToCsv("logs/gemini.csv", [prompt, "error", response]);
+				await logToCsv("logs/gemini.csv", [prompt, "none", response]);
 			}
 		});
 	} catch (e) {

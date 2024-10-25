@@ -1,7 +1,8 @@
 {
   "license": "UNLICENSED",
   "scripts": {
-    "gemini": "node src/gemini/main.js"
+    "gemini": "node src/gemini/main.js",
+    "llama": "node src/llama/main.js"
   },
   "type": "module",
   "dependencies": {

@@ -1,52 +1,71 @@
-// import { runQuery } from "../db/mysqlClient.js"
-// import { title } from "../utils/titleStr.js"
+import { runQuery } from "../../common/db/db2Client.js"
 
-// export const module = [
-// 	// function
-// 	{
-// 		IESListByRegion : async ( where ) => {
-// 			var sql = 'SELECT NO_IES FROM mec.ED_SUP_IES';
+export const module = [
+	// function
+	{
+		IESListByRegion : async ( { regiao, uf } ) => {
+			var select = 'SELECT NOME_IES';
 
-// 			if (where.regiao) {
-// 				sql += ` WHERE NO_REGIAO_IES = '${where.regiao}'`;
-// 			} 
+            var from = ''
+            var where = ''
 
-// 			if (where.uf) {
-// 				if (!sql.includes('WHERE')) sql += ` WHERE NO_UF_IES = '${where.uf}'`;
-// 				else sql += ` AND NO_UF_IES = '${where.uf}'`
-// 			}
+            if (uf) {
+				var from = `
+                FROM INEP.CENSO_IES ies
+                INNER JOIN INEP.MUNICIPIOS_IBGE mu ON ies.COD_MUNICIPIO = mu.COD_IBGE
+                INNER JOIN INEP.MICROREGIOES_IBGE mi ON mu.COD_MICROREGIAO_IBGE = mi.COD_MICROREGIAO_IBGE
+                INNER JOIN INEP.MESOREGIOES_IBGE me ON mi.COD_MESOREGIAO_IBGE = me.COD_MESOREGIAO_IBGE 
+                INNER JOIN INEP.UF_IBGE uf ON me.COD_UF_IBGE = uf.UF_IBGE
+                `;
+				
+                var where = `
+                WHERE NOME_UF_IBGE = '${uf}'
+                `;
+			} else if (regiao) {
+                var from = `
+                FROM INEP.CENSO_IES ies
+                INNER JOIN INEP.MUNICIPIOS_IBGE mu ON ies.COD_MUNICIPIO = mu.COD_IBGE
+                INNER JOIN INEP.MICROREGIOES_IBGE mi ON mu.COD_MICROREGIAO_IBGE = mi.COD_MICROREGIAO_IBGE
+                INNER JOIN INEP.MESOREGIOES_IBGE me ON mi.COD_MESOREGIAO_IBGE = me.COD_MESOREGIAO_IBGE 
+                INNER JOIN INEP.UF_IBGE uf ON me.COD_UF_IBGE = uf.UF_IBGE
+                INNER JOIN INEP.REGIOES_IBGE re ON uf.COD_REGIAO_IBGE = re.COD_REGIAO_IBGE
+                `;
+				
+                var where = `
+                WHERE DESCR_REGIAO_IBGE = '${regiao}'
+                `;
+			} else {
+                var from = `
+                FROM INEP.CENSO_IES
+                `;
+            }
 
-// 			console.log("IESListRegion: ", sql);
-// 			const res = await runQuery(sql);
+            const sql = `${select}${from}${where};`;
 
-// 			const res2 = Object.keys(res).reduce(
-// 				(acc, key) => {
-// 					acc.push(title(res[key].NO_IES));
-// 					return acc;
-// 				}, []
-// 			)
-// 			return { list : res2, filter : where };
-// 		}
-// 	},
+			console.log("IESCountRegion: ", sql);
+			// console.log(sql);
+			return { ...await runQuery(sql), filter : where };
+        }
+	},
 
-// 	// Description
-// 	{
-// 		name: "IESListByRegion",
-// 		parameters: {
-// 			type: "OBJECT",
-// 			description: "Filter for the Institution listing procces",
-// 			properties: {
-// 				regiao: {
-// 					type: "STRING",
-// 					description: "Region (macroregion) where the institutions are located. Can be any string in Kebab Case.",
-// 				},
-// 				uf: {
-// 					type: "STRING",
-// 					description: "Name of the state where the institution is. Must be a string which the words are separated by one empty space. Translate acronyms to the full extent name."
-// 				}
-// 			},
-// 			required: [],
-// 		},
-// 		description : "Returns the List of institutions in the database, filtered by region or state. The state or region filter atributes must be in Brazillian Portuguese. Async function."
-// 	}
-// ]
+	// Description
+	{
+		name: "IESListByRegion",
+		parameters: {
+			type: "OBJECT",
+			description: "Filter for the Institution listing procces",
+			properties: {
+				regiao: {
+					type: "STRING",
+					description: "Region (macroregion) where the institutions are located. Can be any string in Kebab Case.",
+				},
+				uf: {
+					type: "STRING",
+					description: "Name of the state where the institution is. Must be a string which the words are separated by one empty space. Translate acronyms to the full extent name."
+				}
+			},
+			required: [],
+		},
+		description : "Returns a list of institution names in the database, filtered by region or state. The state or region filter atributes must be in Brazillian Portuguese. Async function."
+	}
+]

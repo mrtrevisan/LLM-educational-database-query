@@ -24,6 +24,7 @@ export const module = [
 				${where}`;
 
 			console.log(sql);
+			process.exit();
 			
 			const res = await runQuery(sql);
 			// console.log("res:", res)
