@@ -8,3 +8,6 @@
 10/25/2024, 11:59:14 AM;How many institutions are located in Mato Grosso do Sul?;IESCountByRegion;There are 53 institutions located in Mato Grosso do Sul. 
 10/25/2024, 11:59:39 AM;Tell me the name of 5 of them?;IESListByRegion;Here are 5 institutions located in Mato Grosso do Sul:1. UNIVERSIDADE CATÓLICA DOM BOSCO2. UNIVERSIDADE ANHANGUERA3. CENTRO UNIVERSITÁRIO DA GRANDE DOURADOS4. UNIVERSIDADE ESTADUAL DE MATO GROSSO DO SUL5. FUNDAÇÃO UNIVERSIDADE FEDERAL DA GRANDE DOURADOS 
 10/25/2024, 12:01:14 PM;Thank you! ;none;You're welcome! Is there anything else I can help you with today? 
+10/25/2024, 12:33:06 PM;Where is UFSM located?;InstitutionLocationQuery;I am sorry, I could not find any information about the institution with the acronym UFSM. Please, try another query.
+10/25/2024, 12:33:57 PM;Query again, note that acronyms should be lowercase!;InstitutionLocationQuery;UFSM is located in Rio Grande do Sul. 
+10/25/2024, 12:39:53 PM;Is PUCRS located in a capital city?;InstitutionLocationQuery;Yes, PUCRS is located in a capital city. 
