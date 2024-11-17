@@ -16,6 +16,10 @@ export const runQuery = async (sql) => {
                             console.error("Error closing connection: ", closeErr);
                         }
 
+                        if (err.sqlcode || err.sqlstate) {
+                            resolve({ query_error : err.message, code : err.sqlcode, state : err.sqlstate })
+                        }
+                        
                         return reject(new Error(`Query error: ${err.message}`));
                     });
                 } else {

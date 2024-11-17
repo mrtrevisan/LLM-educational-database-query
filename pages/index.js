@@ -4,6 +4,7 @@ import styles from "./style.module.css";
 export default function Home() {
 	const [message, setMessage] = useState("");
 	const [chatHistory, setChatHistory] = useState([]);
+	const [loading, setLoading] = useState(false);
 	const chatHistoryEndRef = useRef(null);
 
 	// Scroll to the bottom of chatHistory
@@ -16,8 +17,8 @@ export default function Home() {
 		const msg = message;
 		setMessage("");
 
-		const newChatHistory = [...chatHistory, { user: msg }, { loading: 'Loading'}];
-		setChatHistory(newChatHistory);
+		setChatHistory((prev) => [...prev, { user: msg }]);
+		setLoading(true);
 
 		const res = await fetch("/api/gemini", {
 			method: "POST",
@@ -28,9 +29,8 @@ export default function Home() {
 		});
 
 		const data = await res.json();
-
-		newChatHistory.pop();
-		setChatHistory([...newChatHistory, { bot: data.response }]);
+		setLoading(false);
+		setChatHistory((prev) => [...prev, { bot: data.response }]);
 	};
 
 	return (
@@ -44,9 +44,9 @@ export default function Home() {
 				>
 					{chat.user && <strong>User:</strong>} {chat.user}
 					{chat.bot && <strong>Bot:</strong>} {chat.bot}
-					{chat.loading && <span>...</span>} {chat.loading}
 				</div>
 			))}
+			{loading && <div className={styles.botMessage}>{"..."} </div>}
 			<div ref={chatHistoryEndRef} /></div>
 
 			<form className={styles.chatInputForm} onSubmit={handleSubmit}>

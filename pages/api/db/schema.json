@@ -1,0 +1,72 @@
+[
+  {
+    "Tabela": "CENSO_IES",
+    "Colunas": [
+      "COD_IES (INT, chave primária)",
+      "NOME_IES (VARCHAR)",
+      "SIGLA_IES (VARCHAR)",
+      "IN_CAPITAL (INT, 1 se localizada em capital, senão 0)",
+      "COD_MUNICIPIO (VARCHAR, chave estrangeira referencia MUNICIPIOS_IBGE, equivale ao COD_IBGE)"
+    ],
+    "PalavrasChave": ["instituicao", "instituicoes", "capital", "nome", "sigla"] 
+  },
+  {
+    "Tabela": "MUNICIPIOS_IBGE",
+    "Colunas": [
+      "COD_IBGE (VARCHAR, chave primária)",
+      "NOME_MUNICIPIO (VARCHAR)",
+      "COD_MICROREGIAO_IBGE (VARCHAR, chave estrangeira referencia MICROREGIOES_IBGE)"
+    ],
+    "PalavrasChave": [
+      "municipio", "municipios", "cidade", "cidades", "microregiao", "microregioes", "mesoregiao", "mesoregioes",
+      "regiao", "regioes", "estado", "estados", "uf", "unidade federativa", "macroregiao", "macroregioes"
+    ] 
+  },
+  {
+    "Tabela": "MICROREGIOES_IBGE",
+    "Colunas": [
+      "COD_MICROREGIAO_IBGE (VARCHAR, chave primária)",
+      "NOME_MICROREGIAO_IBGE (VARCHAR)",
+      "COD_MESOREGIAO_IBGE (VARCHAR, chave estrangeira referencia MESOREGIOES_IBGE)"
+    ],
+    "PalavrasChave": [
+      "microregiao", "microregioes", "mesoregiao", "mesoregioes",
+      "regiao", "regioes", "estado", "estados", "uf", "unidade federativa",
+      "macroregiao", "macroregioes"
+    ] 
+  },
+  {
+    "Tabela": "MESOREGIOES_IBGE",
+    "Colunas": [
+      "COD_MESOREGIAO_IBGE (VARCHAR, chave primária)",
+      "NOME_MESOREGIAO_IBGE (VARCHAR)",
+      "COD_UF_IBGE (VARCHAR, chave estrangeira referencia UF_IBGE)"
+    ],
+    "PalavrasChave": [
+      "mesoregiao", "mesoregioes", "regiao", "regioes",
+      "estado", "estados", "uf", "unidade federativa", "macroregiao", "macroregioes"
+    ] 
+  },
+  {
+    "Tabela": "UF_IBGE",
+    "Colunas": [
+      "UF_IBGE (VARCHAR, chave primária)",
+      "NOME_UF_IBGE (VARCHAR)",
+      "COD_REGIAO_IBGE (INT, chave estrangeira referencia REGIOES_IBGE)"
+    ],
+    "PalavrasChave": [
+      "regiao", "regioes", "estado", "estados", "uf", "unidade federativa",
+      "macroregiao", "macroregioes"
+    ] 
+  },
+  {
+    "Tabela": "REGIOES_IBGE",
+    "Colunas": [
+      "COD_REGIAO_IBGE (INT, chave primária)",
+      "DESCR_REGIAO_IBGE (VARCHAR)"
+    ],
+    "PalavrasChave": [
+      "regiao", "regioes", "macroregiao", "macroregioes"
+    ] 
+  }
+]
