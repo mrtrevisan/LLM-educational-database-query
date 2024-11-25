@@ -6,7 +6,9 @@
       "NOME_IES (VARCHAR)",
       "SIGLA_IES (VARCHAR)",
       "IN_CAPITAL (INT, 1 se localizada em capital, senão 0)",
-      "COD_MUNICIPIO (VARCHAR, chave estrangeira referencia MUNICIPIOS_IBGE, equivale ao COD_IBGE)"
+      "COD_MUNICIPIO (VARCHAR, chave estrangeira referencia MUNICIPIOS_IBGE, equivale ao COD_IBGE)",
+      "ID_CATEGORIA_ADMINISTRATIVA (INT, chave estrangeira referencia CENSO_CATEGORIA_ADMINISTRATIVA)",
+      "ID_ORGANIZACAO_ACADEMICA (INT, chave estrangeira referencia CENSO_ORGANIZACAO_ACADEMICA)"
     ],
     "PalavrasChave": ["instituicao", "instituicoes", "capital", "nome", "sigla"] 
   },
@@ -67,6 +69,76 @@
     ],
     "PalavrasChave": [
       "regiao", "regioes", "macroregiao", "macroregioes"
+    ] 
+  },
+  {
+    "Tabela": "CENSO_CATEGORIAS_ADMINISTRATIVAS",
+    "Colunas": [
+      "ID_CATEGORIA_ADMINISTRATIVA (INT, chave primária)",
+      "DESCR_CATEGORIA_ADMINISTRATIVA (VARCHAR)"
+    ],
+    "PalavrasChave": [
+      "categoria", "categorias", "categoria administrativa", "categorias administrativas"
+    ] 
+  },
+  {
+    "Tabela": "CENSO_ORGANIZACOES_ACADEMICAS",
+    "Colunas": [
+      "ID_ORGANIZACAO_ACADEMICA (INT, chave primária)",
+      "DESCR_ORGANIZACAO_ACADEMICA (VARCHAR)"
+    ],
+    "PalavrasChave": [
+      "organizacao", "organizacoes", "organizacao academica", "organizacoes academicas"
+    ] 
+  },
+  {
+    "Tabela": "CENSO_CURSOS",
+    "Colunas": [
+      "COD_CURSO (INT, chave primária)",
+      "NOME_CURSO (VARCHAR)",
+      "COD_IES (INT, chave estrangeira referencia CENSO_IES)",
+      "ID_GRAU_ACADEMICO (INT, chave estrangeira referencia CENSO_GRAUS_ACADEMICOS)",
+      "ID_MODALIDADE_ENSINO (INT, chave estrangeira referencia CENSO_MODALIDADES_ENSINO)",
+      "TEMPO_INTEGRALIZACAO (INT)"
+    ],
+    "PalavrasChave": [
+      "curso", "cursos"
+    ] 
+  },
+  {
+    "Tabela": "CENSO_GRAUS_ACADEMICOS",
+    "Colunas": [
+      "ID_GRAU_ACADEMICO (INT, chave primária)",
+      "DESCR_GRAU_ACADEMICO (VARCHAR)"
+    ],
+    "PalavrasChave": [
+      "grau academico", "graus academicos", "grau", "graus"
+    ] 
+  },
+  {
+    "Tabela": "CENSO_MODALIDADES_ENSINO",
+    "Colunas": [
+      "ID_MODALIDADE_ENSINO (INT, chave primária)",
+      "DESCR_MODALIDADE_ENSINO (VARCHAR)"
+    ],
+    "PalavrasChave": [
+      "modalidade", "modalidades"
+    ] 
+  },
+  {
+    "Tabela": "DADOS_IES_DOCENTES",
+    "Colunas": [
+      "NU_ANO_CENSO (INT)",
+      "CO_IES (INT, chave estrangeira referencia CENSO_IES, equivale a COD_IES)",
+      "QT_DOC_TOTAL (INT, quantidade de docentes total)",
+      "QT_DOC_EX_GRAD (INT, quantidade de docentes em exercício com curso de graduação)",
+      "QT_DOC_EX_SEM_GRAD (INT, quantidade de docentes em exercício sem curso de graduação)",
+      "QT_DOC_EX_ESP (INT, quantidade de docentes em exercício com especialização)",
+      "QT_DOC_EX_MEST (INT, quantidade de docentes em exercício com mestrado)",
+      "QT_DOC_EX_DOUT (INT, quantidade de docentes em exercício com doutorado)"
+    ],
+    "PalavrasChave": [
+      "docente", "docentes", "professores"
     ] 
   }
 ]

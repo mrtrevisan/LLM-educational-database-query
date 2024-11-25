@@ -1,7 +1,16 @@
 // import ollama from 'ollama';
-// import { loadModules } from "../common/utils/loadModules.js";
-// import { logToCsv } from "../common/utils/doLog.js";
-// import 'dotenv/config';
+import { loadModules } from "../common/utils/loadModules.js";
+import { logToCsv } from "../common/utils/doLog.js";
+import 'dotenv/config';
+
+import { HfInference } from "@huggingface/inference";
+
+const inference = new HfInference(process.env.HF_KEY);
+
+const result = await inference.textClassification({
+    model: "cardiffnlp/twitter-roberta-base-sentiment-latest",
+    inputs: "Today is a great day",
+});
 
 // const model = "llama3.1:8b";
 

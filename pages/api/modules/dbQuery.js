@@ -18,11 +18,11 @@ export const module = [
 			properties: {
 				sql: {
 					type: "STRING",
-					description: "sql query to run",
+					description: "consulta em SQL",
 				}
 			},
 			required: ["sql"],
 		},
-		description : "receives a sql query, runs it on the database, then returns the results"
+		description : "Essa função recupera informações de uma base de dados de instituições educacionais."
 	}
 ]

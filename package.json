@@ -8,6 +8,7 @@
   "type": "module",
   "dependencies": {
     "@google/generative-ai": "^0.19.0",
+    "@huggingface/inference": "^2.8.1",
     "dotenv": "^16.4.5",
     "ibm_db": "^3.2.4",
     "mysql2": "^3.11.3",
