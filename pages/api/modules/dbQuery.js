@@ -4,7 +4,7 @@ export const module = [
 	// function
 	{
 		dbQuery : async ( { sql } ) => {
-            const sql_ = "SET SCHEMA INEP; " + sql;
+            const sql_ = "SET SCHEMA INEP; " + sql.replace(/\\/g, '');
 
 			return { result : await runQuery(sql_) };
 		}

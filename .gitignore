@@ -1,5 +1,6 @@
 *.env
 /docs
+/logs
 node_modules
 .next
 .DS_Store

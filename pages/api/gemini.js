@@ -4,11 +4,13 @@ import { loadSchemas } from "./utils/loadSchemas";
 import { doLog } from "./utils/doLog"
 import 'dotenv/config';
 
-const { functions, declarations} = loadModules();
+const model = 'gemini-1.5-pro';
+
+const { functions, declarations } = loadModules();
 
 const genAI = new GoogleGenerativeAI(process.env.API_KEY).getGenerativeModel({
     // * Must be a model that supports function calling, like a Gemini 1.5 model
-    model: "gemini-1.5-pro",
+    model: model,
 
     // * Must specify the function declarations for function calling
     tools: {
@@ -21,6 +23,7 @@ const chat = genAI.startChat();
 export default async function handler(req, res) {
     if (req.method === 'POST') {
         const logData = {};
+        logData.model = model;
         var response;
 
         const { message } = req.body;
@@ -37,7 +40,7 @@ export default async function handler(req, res) {
             ${message}
             Dicas: Ao escrever qualquer sql, prefira usar LIKE para comparação de strings;
             Ao escrever qualquer sql, use a função LCASE() para envolver colunas e valores do tipo VARCHAR;
-            NÃO use o caracter backslash;
+            NÃO é necessário escapar caracteres usando a contra-barra, esse caracter NÃO é aceito;
             Por exemplo, WHERE LCASE(NOME) LIKE LCASE('Gemini');
             `;
 
@@ -65,7 +68,7 @@ export default async function handler(req, res) {
                 
                     response = result2.response.text();
                 } catch (e) {
-                    return res.status(500).json({ response : "Erro interno no banco: " + e.message});
+                    return res.status(500).json({ response : "Erro interno: " + e.message});
                 }
             } else {
                 response = result.response.text();
@@ -75,7 +78,7 @@ export default async function handler(req, res) {
         }
 
         logData.response = response;
-        await doLog("logs/gemini.txt", logData);
+        await doLog("logs/aval-pro.txt", logData);
 
         return res.status(200).json({ response : response});
     }

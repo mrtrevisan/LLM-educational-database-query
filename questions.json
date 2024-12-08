@@ -1,0 +1,32 @@
+{
+    "facil": [
+        "Qual a sigla da instituição X?",
+        "Qual o nome da instituição de sigla X?",
+        "Quantas instituições estão localizadas em cidades capitais?",
+        "A instituição X está localizada em uma cidade capital?",
+        "Quantos cursos possuem tempo de integralização de X anos?"
+    ],
+    "medio" : [
+        "Quantas instituições existem na cidade X?",
+        "Quantas instituições existem no estado X?",
+        "Quantas instituições existem na região X?",
+        "Qual a distribuição de instituições por região?",
+        "Qual a média de instituições entre as regiões?",
+        "Quantas instituições de nível superior são de administração pública e quantas são privadas?",
+        "Quantos cursos são ofertados pela instituição X?",
+        "O curso X é ofertado pela instituição Y?",
+        "Quantos cursos de grau X são ofertados pela instituição Y?",
+        "Quantos cursos da área do conhecimento X são ofertados pela instituição Y?",
+        "Quantos cursos são ofertados pela modalidade X pela instituição Y?",
+        "Qual a média do tempo de integralização dos cursos da instituição X?",
+        "Qual a média do tempo de integralização dos cursos da área do conhecimento X?",
+        "Quantos docentes na instituição Y tem título de doutorado?",
+        "Quantos docentes na instituição Y tem título de mestrado ou especialização?"
+    ],
+    "dificil" : [
+        "Qual a distribuição de instituições, por tipo de organização acadêmica, por região IBGE?",
+        "Qual a distribuição de instituições, por tipo de administração, por estado?",
+        "Qual a distribuição de cursos, por área do conhecimento, por região IBGE?",
+        "Qual o percentual de docentes com doutorado, por instituição, por região IBGE?"
+    ]
+}

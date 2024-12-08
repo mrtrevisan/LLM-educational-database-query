@@ -78,7 +78,7 @@
       "DESCR_CATEGORIA_ADMINISTRATIVA (VARCHAR)"
     ],
     "PalavrasChave": [
-      "categoria", "categorias", "categoria administrativa", "categorias administrativas"
+      "categoria", "categorias", "categoria administrativa", "categorias administrativas", "administracao"
     ] 
   },
   {
@@ -99,7 +99,8 @@
       "COD_IES (INT, chave estrangeira referencia CENSO_IES)",
       "ID_GRAU_ACADEMICO (INT, chave estrangeira referencia CENSO_GRAUS_ACADEMICOS)",
       "ID_MODALIDADE_ENSINO (INT, chave estrangeira referencia CENSO_MODALIDADES_ENSINO)",
-      "TEMPO_INTEGRALIZACAO (INT)"
+      "COD_CINE_AREA_GERAL (VARCHAR, chave estrangeira referencia CENSO_CINE_AREA_GERAL)",
+      "TEMPO_INTEGRALIZACAO_ANOS (INT)"
     ],
     "PalavrasChave": [
       "curso", "cursos"
@@ -123,6 +124,17 @@
     ],
     "PalavrasChave": [
       "modalidade", "modalidades"
+    ] 
+  },
+  {
+    "Tabela": "CENSO_CINE_AREA_GERAL",
+    "Colunas": [
+      "COD_CINE_AREA_GERAL (VARCHAR, chave primária)",
+      "DESCR_CINE_AREA_GERAL (VARCHAR, descrição da área do conhecimento)"
+    ],
+    "PalavrasChave": [
+      "area", "areas", "areas do conhecimento", "areas de conhecimento",
+      "area do conhecimento", "area de conhecimento"
     ] 
   },
   {
