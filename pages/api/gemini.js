@@ -43,7 +43,7 @@ export default async function handler(req, res) {
             NÃO é necessário escapar caracteres usando a contra-barra, esse caracter NÃO é aceito;
             Por exemplo, WHERE LCASE(NOME) LIKE LCASE('Gemini');
             `;
-
+            
             // return res.status(200).json({ response : prompt });
 
             const result = await chat.sendMessage(prompt);
@@ -78,7 +78,7 @@ export default async function handler(req, res) {
         }
 
         logData.response = response;
-        await doLog("logs/aval-pro.txt", logData);
+        await doLog("logs/gemini.txt", logData);
 
         return res.status(200).json({ response : response});
     }

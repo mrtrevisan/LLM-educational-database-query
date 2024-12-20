@@ -23,7 +23,7 @@ export const module = [
 					INNER JOIN INEP.REGIOES_IBGE re ON uf.COD_REGIAO_IBGE = re.COD_REGIAO_IBGE
 				${where}`;
 
-			console.log(sql);			
+			// console.log(sql);			
 			const res = await runQuery(sql);
 			// console.log("res:", res)
 

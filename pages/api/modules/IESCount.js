@@ -10,40 +10,39 @@ export const module = [
             var where = ''
 
             if (uf) {
-				var from = `
-                FROM INEP.CENSO_IES ies
-                INNER JOIN INEP.MUNICIPIOS_IBGE mu ON ies.COD_MUNICIPIO = mu.COD_IBGE
-                INNER JOIN INEP.MICROREGIOES_IBGE mi ON mu.COD_MICROREGIAO_IBGE = mi.COD_MICROREGIAO_IBGE
-                INNER JOIN INEP.MESOREGIOES_IBGE me ON mi.COD_MESOREGIAO_IBGE = me.COD_MESOREGIAO_IBGE 
-                INNER JOIN INEP.UF_IBGE uf ON me.COD_UF_IBGE = uf.UF_IBGE
+				from = `
+					FROM INEP.CENSO_IES ies
+					INNER JOIN INEP.MUNICIPIOS_IBGE mu ON ies.COD_MUNICIPIO = mu.COD_IBGE
+					INNER JOIN INEP.MICROREGIOES_IBGE mi ON mu.COD_MICROREGIAO_IBGE = mi.COD_MICROREGIAO_IBGE
+					INNER JOIN INEP.MESOREGIOES_IBGE me ON mi.COD_MESOREGIAO_IBGE = me.COD_MESOREGIAO_IBGE 
+					INNER JOIN INEP.UF_IBGE uf ON me.COD_UF_IBGE = uf.UF_IBGE
                 `;
 				
-                var where = `
-                WHERE NOME_UF_IBGE = '${uf}'
+                where = `
+                	WHERE NOME_UF_IBGE = '${uf}'
                 `;
 			} else if (regiao) {
-                var from = `
-                FROM INEP.CENSO_IES ies
-                INNER JOIN INEP.MUNICIPIOS_IBGE mu ON ies.COD_MUNICIPIO = mu.COD_IBGE
-                INNER JOIN INEP.MICROREGIOES_IBGE mi ON mu.COD_MICROREGIAO_IBGE = mi.COD_MICROREGIAO_IBGE
-                INNER JOIN INEP.MESOREGIOES_IBGE me ON mi.COD_MESOREGIAO_IBGE = me.COD_MESOREGIAO_IBGE 
-                INNER JOIN INEP.UF_IBGE uf ON me.COD_UF_IBGE = uf.UF_IBGE
-                INNER JOIN INEP.REGIOES_IBGE re ON uf.COD_REGIAO_IBGE = re.COD_REGIAO_IBGE
+                from = `
+					FROM INEP.CENSO_IES ies
+					INNER JOIN INEP.MUNICIPIOS_IBGE mu ON ies.COD_MUNICIPIO = mu.COD_IBGE
+					INNER JOIN INEP.MICROREGIOES_IBGE mi ON mu.COD_MICROREGIAO_IBGE = mi.COD_MICROREGIAO_IBGE
+					INNER JOIN INEP.MESOREGIOES_IBGE me ON mi.COD_MESOREGIAO_IBGE = me.COD_MESOREGIAO_IBGE 
+					INNER JOIN INEP.UF_IBGE uf ON me.COD_UF_IBGE = uf.UF_IBGE
+					INNER JOIN INEP.REGIOES_IBGE re ON uf.COD_REGIAO_IBGE = re.COD_REGIAO_IBGE
                 `;
 				
-                var where = `
-                WHERE DESCR_REGIAO_IBGE = '${regiao}'
+                where = `
+                	WHERE DESCR_REGIAO_IBGE = '${regiao}'
                 `;
 			} else {
-                var from = `
-                FROM INEP.CENSO_IES
+                from = `
+                	FROM INEP.CENSO_IES
                 `;
             }
 
             const sql = `${select}${from}${where};`;
 
-			console.log("IESCountRegion: ", sql);
-			// console.log(sql);
+			// console.log("IESCountRegion: ", sql);
 			return { ...await runQuery(sql), filter : where };
 		}
 	},
